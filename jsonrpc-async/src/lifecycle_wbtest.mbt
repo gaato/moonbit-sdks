@@ -424,7 +424,7 @@ impl @io.BinaryReaderImpl for ChunkReader with fn raw_read_impl(
   offset~,
   max_len~,
 ) {
-  self.idle.read_into(dst, offset~, max_len~)
+  self.idle.read_into(dst.mut_view(start=offset, end=offset + max_len))
 }
 
 ///|

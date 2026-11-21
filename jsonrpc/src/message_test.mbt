@@ -179,7 +179,7 @@ test "reserved errors and invalid error objects" {
 test "encoded record has exactly one final raw newline" {
   let message = @jsonrpc.Message::Notification(
     name="log",
-    params=Some(Json::string("first\nsecond\r\n last")),
+    params=Some(Json::string("first\nsecond\r\n\u{2028}last")),
   )
   let bytes = message.encode(envelope=Strict)
   assert_true(bytes.length() > 0)
