@@ -128,19 +128,19 @@ pub fn[T : @json.FromJson] Gemini::paginate(
 }
 
 ///|
-/// Pages models_list, building the first request from the operation parameters.
-pub fn Gemini::list_models_pages(
+/// Pages cached_contents_list, building the first request from the operation parameters.
+pub fn Gemini::list_cached_contents_pages(
   self : Gemini,
   page_size? : Int32,
   page_token? : String,
-) -> @client.Paginator[@gen.Model, Failure] {
-  let first = @gen.models_list_request(page_size?, page_token?)
+) -> @client.Paginator[@gen.CachedContent, Failure] {
+  let first = @gen.cached_contents_list_request(page_size?, page_token?)
   self.paginate(
     first,
     kind=PageKind::Cursor("pageToken"),
-    items="models",
+    items="cachedContents",
     next="nextPageToken",
-    operation="models_list",
+    operation="cached_contents_list",
   )
 }
 
@@ -162,18 +162,18 @@ pub fn Gemini::list_files_pages(
 }
 
 ///|
-/// Pages cached_contents_list, building the first request from the operation parameters.
-pub fn Gemini::list_cached_contents_pages(
+/// Pages models_list, building the first request from the operation parameters.
+pub fn Gemini::list_models_pages(
   self : Gemini,
-  page_token? : String,
   page_size? : Int32,
-) -> @client.Paginator[@gen.CachedContent, Failure] {
-  let first = @gen.cached_contents_list_request(page_token?, page_size?)
+  page_token? : String,
+) -> @client.Paginator[@gen.Model, Failure] {
+  let first = @gen.models_list_request(page_size?, page_token?)
   self.paginate(
     first,
     kind=PageKind::Cursor("pageToken"),
-    items="cachedContents",
+    items="models",
     next="nextPageToken",
-    operation="cached_contents_list",
+    operation="models_list",
   )
 }

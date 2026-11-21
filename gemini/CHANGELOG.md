@@ -11,6 +11,7 @@
 - **Regenerated from the upstream spec fetched 2026-11-20** (sha256 `474ab75875fb`). Changes are batched for the next weekly release; see the generated interface diff.
 - **Depends on gaato/mttp_core 0.3.2**; the client behaves as before.
 - **The README is rewritten**: complete examples, the retries, deadlines and limits and what the client does not cover.
+- **Regenerated from the upstream spec fetched 2026-11-21** (sha256 `f65f4a670d3a`). Changes are batched for the next weekly release; see the generated interface diff.
 
 ### Security
 
