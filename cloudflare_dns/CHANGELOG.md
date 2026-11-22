@@ -5,6 +5,7 @@
 ### Changed
 
 - **Depends on gaato/mttp_core 0.3.2**; the client behaves as before.
+- **Regenerated from the upstream spec fetched 2026-11-22** (sha256 `b75ba2b7b145`). Changes are batched for the next weekly release; see the generated interface diff.
 
 ## [0.1.1] - 2026-11-21
 
