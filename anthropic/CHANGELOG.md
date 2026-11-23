@@ -15,6 +15,8 @@ are optional unless the field is required, and keep a wildcard arm.
 
 ## [Unreleased]
 
+## [0.18.0] - 2026-11-23
+
 ### Changed
 
 - Generated code now qualifies constructor references; no public API change.

@@ -16,10 +16,10 @@ preferred_target = "native"
 import {
   "gaato/mttp@0.5.2",
   "gaato/mttp_core@0.3.2",
-  "gaato/openai@0.10.0",
-  "gaato/anthropic@0.17.0",
-  "gaato/github@0.25.0",
+  "gaato/openai@0.11.0",
+  "gaato/anthropic@0.18.0",
+  "gaato/github@0.26.0",
   "gaato/fixture-badhttp@0.0.0",
-  "gaato/gemini@0.1.0",
-  "gaato/cloudflare_dns@0.1.1",
+  "gaato/gemini@0.2.0",
+  "gaato/cloudflare_dns@0.1.2",
 }

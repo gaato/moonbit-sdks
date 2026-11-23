@@ -11,6 +11,8 @@ change itself is the diff of `src/gen/pkg.generated.mbti`.
 
 ## [Unreleased]
 
+## [0.11.0] - 2026-11-23
+
 ### Added
 
 - **Provider options on embedding requests.** `EmbeddingRequest::new` accepts

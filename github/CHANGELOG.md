@@ -14,6 +14,8 @@ are optional unless the field is required, and keep a wildcard arm.
 
 ## [Unreleased]
 
+## [0.26.0] - 2026-11-23
+
 ### Changed
 
 - The default `User-Agent` is now `gaato-moonbit-sdks/0.1.0` (was `gaato-mbt-sdk/0.1.0`), because the repository was renamed to `gaato/moonbit-sdks`. Pass `user_agent~` to keep your own.
