@@ -1,9 +1,9 @@
 # anthropic.json
 
 - Source: https://raw.githubusercontent.com/anthropics/anthropic-sdk-python/main/scripts/mock-spec.json.gz
-- Fetched: 2026-11-23
-- sha256: 88cbbb4a6a986e549e65fff7e5800fcd931ac52edb9c3be1b7cc2b67cdb9176b
-- sha256 (gzip as downloaded): 6f12b18f95b5c721d0b81be4cc08a32bcf9309a34c3e3705efa72974fd891354
+- Fetched: 2026-11-24
+- sha256: 716377f64877bf13d669f950f268c70e8ec97b0dc23190dcaf54ef48df0bdfbe
+- sha256 (gzip as downloaded): 2b0de3125836148e497017e9a5267d1b0ff20dd8886586047d2c2b8c439421e2
 - OpenAPI version: 3.1.0 (info has no version field; the file follows the SDK releases)
 
 The downloaded source is gunzipped, byte for byte, before vendoring.
