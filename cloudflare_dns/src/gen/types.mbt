@@ -14565,6 +14565,8 @@ pub(all) enum DnsRecordOrder {
   Content
   Ttl
   Proxied
+  CreatedOn
+  ModifiedOn
   Custom(String)
 }
 
@@ -14587,6 +14589,8 @@ pub impl ToJson for DnsRecordOrder with fn to_json(self) {
     DnsRecordOrder::Content => "content"
     DnsRecordOrder::Ttl => "ttl"
     DnsRecordOrder::Proxied => "proxied"
+    DnsRecordOrder::CreatedOn => "created_on"
+    DnsRecordOrder::ModifiedOn => "modified_on"
     DnsRecordOrder::Custom(raw) => raw
   }
   @json.Json::Json(raw)
@@ -14609,6 +14613,8 @@ pub impl @json.FromJson for DnsRecordOrder with fn from_json(value, path) {
         "content" => Option::Some(DnsRecordOrder::Content)
         "ttl" => Option::Some(DnsRecordOrder::Ttl)
         "proxied" => Option::Some(DnsRecordOrder::Proxied)
+        "created_on" => Option::Some(DnsRecordOrder::CreatedOn)
+        "modified_on" => Option::Some(DnsRecordOrder::ModifiedOn)
         _ => Option::None
       }
     },
@@ -14618,7 +14624,7 @@ pub impl @json.FromJson for DnsRecordOrder with fn from_json(value, path) {
 
 ///|
 ///
-/// Whether to match all tag search requirements or at least one (any). If set to `all`, acts like a logical AND between tag filters. If set to `any`, acts like a logical OR instead. Note that the regular `match` parameter is still used to combine the resulting condition with other filters that aren't related to tags.
+/// Whether to match all tag search requirements or at least one (any). If set to `all`, acts like a logical AND between tag filters. If set to `any`, acts like a logical OR instead. Note that the regular `match` parameter is still used to combine the resulting condition with other filters that aren't related to tags. The legacy `tag-match` parameter is an alias for this parameter.
 #derive(Eq, @debug.Debug)
 #non_exhaustive
 pub(all) enum DnsRecordTagMatch {
