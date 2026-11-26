@@ -15664,7 +15664,7 @@ pub impl @json.FromJson for IssueFieldValue with fn from_json(value, path) {
 
 ///|
 ///
-/// The status of the issue, or `null` if it has none. Issue statuses are in preview and only available to accounts enrolled in the preview.
+/// The status of the issue, or `null` if it has none. Issue statuses are in public preview and subject to change.
 #derive(Eq, @debug.Debug)
 pub(all) struct IssueStatus {
   id : Int64
@@ -22753,6 +22753,8 @@ pub(all) struct CreateBudgetBudget {
   id : String?
   budget_scope : CreateBudgetBudgetBudgetScope?
   budget_entity_name : String?
+  user : String?
+  consumed_amount : Double?
   budget_amount : Int32?
   prevent_further_usage : Bool?
   budget_product_sku : String?
@@ -22774,6 +22776,8 @@ pub fn CreateBudgetBudget::new(
   id? : String,
   budget_scope? : CreateBudgetBudgetBudgetScope,
   budget_entity_name? : String,
+  user? : String,
+  consumed_amount? : Double,
   budget_amount? : Int32,
   prevent_further_usage? : Bool,
   budget_product_sku? : String,
@@ -22785,6 +22789,8 @@ pub fn CreateBudgetBudget::new(
     id,
     budget_scope,
     budget_entity_name,
+    user,
+    consumed_amount,
     budget_amount,
     prevent_further_usage,
     budget_product_sku,
@@ -22805,6 +22811,8 @@ pub impl ToJson for CreateBudgetBudget with fn to_json(self) {
   .opt("id", self.id)
   .opt("budget_scope", self.budget_scope)
   .opt("budget_entity_name", self.budget_entity_name)
+  .opt("user", self.user)
+  .opt("consumed_amount", self.consumed_amount)
   .opt("budget_amount", self.budget_amount)
   .opt("prevent_further_usage", self.prevent_further_usage)
   .opt("budget_product_sku", self.budget_product_sku)
@@ -22826,6 +22834,8 @@ pub impl @json.FromJson for CreateBudgetBudget with fn from_json(value, path) {
     id: @sdkjson.opt_field(obj, "id", path),
     budget_scope: @sdkjson.opt_field(obj, "budget_scope", path),
     budget_entity_name: @sdkjson.opt_field(obj, "budget_entity_name", path),
+    user: @sdkjson.opt_field(obj, "user", path),
+    consumed_amount: @sdkjson.opt_field(obj, "consumed_amount", path),
     budget_amount: @sdkjson.opt_field(obj, "budget_amount", path),
     prevent_further_usage: @sdkjson.opt_field(
       obj, "prevent_further_usage", path,
@@ -80194,7 +80204,7 @@ pub impl @json.FromJson for InteractionLimitPullRequestBypassList with fn from_j
 
 ///|
 ///
-/// The status of the issue, or `null` if it has none. Issue statuses are in preview and only available to accounts enrolled in the preview.
+/// The status of the issue, or `null` if it has none. Issue statuses are in public preview and subject to change.
 #derive(Eq, @debug.Debug)
 pub(all) struct NullableIssueStatus {
   id : Int64
@@ -82240,6 +82250,81 @@ pub impl @json.FromJson for IssueSuggestion with fn from_json(value, path) {
 
 ///|
 ///
+/// The Copilot code review severity of this comment, or null if unavailable.
+#derive(Eq, @debug.Debug)
+#non_exhaustive
+pub(all) enum PullRequestReviewCommentCopilotCodeReviewSeverity {
+  Low
+  Medium
+  High
+  Unknown(String)
+}
+
+///|
+pub extend PullRequestReviewCommentCopilotCodeReviewSeverity with Eq::{
+  equal,
+  not_equal,
+}
+
+///|
+pub extend PullRequestReviewCommentCopilotCodeReviewSeverity with @debug.Debug::{
+  to_repr,
+}
+
+///|
+///
+/// Encodes this string enum as JSON.
+pub extend PullRequestReviewCommentCopilotCodeReviewSeverity with ToJson::{
+  to_json,
+}
+
+///|
+pub impl ToJson for PullRequestReviewCommentCopilotCodeReviewSeverity with fn to_json(
+  self,
+) {
+  let raw = match self {
+    PullRequestReviewCommentCopilotCodeReviewSeverity::Low => "low"
+    PullRequestReviewCommentCopilotCodeReviewSeverity::Medium => "medium"
+    PullRequestReviewCommentCopilotCodeReviewSeverity::High => "high"
+    PullRequestReviewCommentCopilotCodeReviewSeverity::Unknown(raw) => raw
+  }
+  @json.Json::Json(raw)
+}
+
+///|
+///
+/// Decodes this string enum from JSON.
+pub extend PullRequestReviewCommentCopilotCodeReviewSeverity with @json.FromJson::{
+  from_json,
+}
+
+///|
+pub impl @json.FromJson for PullRequestReviewCommentCopilotCodeReviewSeverity with fn from_json(
+  value,
+  path,
+) {
+  @sdkjson.open_string(
+    value,
+    path,
+    raw => {
+      match raw {
+        "low" =>
+          Option::Some(PullRequestReviewCommentCopilotCodeReviewSeverity::Low)
+        "medium" =>
+          Option::Some(
+            PullRequestReviewCommentCopilotCodeReviewSeverity::Medium,
+          )
+        "high" =>
+          Option::Some(PullRequestReviewCommentCopilotCodeReviewSeverity::High)
+        _ => Option::None
+      }
+    },
+    raw => PullRequestReviewCommentCopilotCodeReviewSeverity::Unknown(raw),
+  )
+}
+
+///|
+///
 /// The kind of contributing source.
 #derive(Eq, @debug.Debug)
 #non_exhaustive
@@ -82769,6 +82854,9 @@ pub impl @json.FromJson for PullRequestReviewCommentSubjectType with fn from_jso
 #derive(Eq, @debug.Debug)
 pub(all) struct PullRequestReviewComment {
   is_copilot_code_review : Bool?
+  copilot_code_review_severity : @sdkjson.Presence[
+    PullRequestReviewCommentCopilotCodeReviewSeverity,
+  ]
   copilot_code_review_sources : Array[
     PullRequestReviewCommentCopilotCodeReviewSourcesItem,
   ]?
@@ -82828,6 +82916,7 @@ pub fn PullRequestReviewComment::new(
   author_association~ : AuthorAssociation,
   links~ : PullRequestReviewCommentLinks,
   is_copilot_code_review? : Bool,
+  copilot_code_review_severity? : PullRequestReviewCommentCopilotCodeReviewSeverity,
   copilot_code_review_sources? : Array[
     PullRequestReviewCommentCopilotCodeReviewSourcesItem,
   ],
@@ -82849,6 +82938,9 @@ pub fn PullRequestReviewComment::new(
 ) -> PullRequestReviewComment {
   {
     is_copilot_code_review,
+    copilot_code_review_severity: @sdkjson.Presence::from_option(
+      copilot_code_review_severity,
+    ),
     copilot_code_review_sources,
     url,
     pull_request_review_id,
@@ -82891,6 +82983,7 @@ pub extend PullRequestReviewComment with ToJson::{to_json}
 pub impl ToJson for PullRequestReviewComment with fn to_json(self) {
   @sdkjson.ObjBuilder::new()
   .opt("is_copilot_code_review", self.is_copilot_code_review)
+  .presence("copilot_code_review_severity", self.copilot_code_review_severity)
   .opt("copilot_code_review_sources", self.copilot_code_review_sources)
   .field("url", self.url)
   .presence(
@@ -82943,6 +83036,9 @@ pub impl @json.FromJson for PullRequestReviewComment with fn from_json(
   {
     is_copilot_code_review: @sdkjson.opt_field(
       obj, "is_copilot_code_review", path,
+    ),
+    copilot_code_review_severity: @sdkjson.presence_field(
+      obj, "copilot_code_review_severity", path,
     ),
     copilot_code_review_sources: @sdkjson.opt_field(
       obj, "copilot_code_review_sources", path,
@@ -86393,6 +86489,67 @@ pub impl @json.FromJson for PullRequestReview with fn from_json(value, path) {
 
 ///|
 ///
+/// The Copilot code review severity of this comment, or null if unavailable.
+#derive(Eq, @debug.Debug)
+#non_exhaustive
+pub(all) enum ReviewCommentCopilotCodeReviewSeverity {
+  Low
+  Medium
+  High
+  Unknown(String)
+}
+
+///|
+pub extend ReviewCommentCopilotCodeReviewSeverity with Eq::{equal, not_equal}
+
+///|
+pub extend ReviewCommentCopilotCodeReviewSeverity with @debug.Debug::{to_repr}
+
+///|
+///
+/// Encodes this string enum as JSON.
+pub extend ReviewCommentCopilotCodeReviewSeverity with ToJson::{to_json}
+
+///|
+pub impl ToJson for ReviewCommentCopilotCodeReviewSeverity with fn to_json(self) {
+  let raw = match self {
+    ReviewCommentCopilotCodeReviewSeverity::Low => "low"
+    ReviewCommentCopilotCodeReviewSeverity::Medium => "medium"
+    ReviewCommentCopilotCodeReviewSeverity::High => "high"
+    ReviewCommentCopilotCodeReviewSeverity::Unknown(raw) => raw
+  }
+  @json.Json::Json(raw)
+}
+
+///|
+///
+/// Decodes this string enum from JSON.
+pub extend ReviewCommentCopilotCodeReviewSeverity with @json.FromJson::{
+  from_json,
+}
+
+///|
+pub impl @json.FromJson for ReviewCommentCopilotCodeReviewSeverity with fn from_json(
+  value,
+  path,
+) {
+  @sdkjson.open_string(
+    value,
+    path,
+    raw => {
+      match raw {
+        "low" => Option::Some(ReviewCommentCopilotCodeReviewSeverity::Low)
+        "medium" => Option::Some(ReviewCommentCopilotCodeReviewSeverity::Medium)
+        "high" => Option::Some(ReviewCommentCopilotCodeReviewSeverity::High)
+        _ => Option::None
+      }
+    },
+    raw => ReviewCommentCopilotCodeReviewSeverity::Unknown(raw),
+  )
+}
+
+///|
+///
 /// The kind of contributing source.
 #derive(Eq, @debug.Debug)
 #non_exhaustive
@@ -86757,6 +86914,9 @@ pub impl @json.FromJson for ReviewCommentSubjectType with fn from_json(
 #derive(Eq, @debug.Debug)
 pub(all) struct ReviewComment {
   is_copilot_code_review : Bool?
+  copilot_code_review_severity : @sdkjson.Presence[
+    ReviewCommentCopilotCodeReviewSeverity,
+  ]
   copilot_code_review_sources : Array[ReviewCommentCopilotCodeReviewSourcesItem]?
   url : String
   pull_request_review_id : Int64?
@@ -86815,6 +86975,7 @@ pub fn ReviewComment::new(
   author_association~ : AuthorAssociation,
   links~ : ReviewCommentLinks,
   is_copilot_code_review? : Bool,
+  copilot_code_review_severity? : ReviewCommentCopilotCodeReviewSeverity,
   copilot_code_review_sources? : Array[
     ReviewCommentCopilotCodeReviewSourcesItem,
   ],
@@ -86835,6 +86996,9 @@ pub fn ReviewComment::new(
 ) -> ReviewComment {
   {
     is_copilot_code_review,
+    copilot_code_review_severity: @sdkjson.Presence::from_option(
+      copilot_code_review_severity,
+    ),
     copilot_code_review_sources,
     url,
     pull_request_review_id,
@@ -86877,6 +87041,7 @@ pub extend ReviewComment with ToJson::{to_json}
 pub impl ToJson for ReviewComment with fn to_json(self) {
   @sdkjson.ObjBuilder::new()
   .opt("is_copilot_code_review", self.is_copilot_code_review)
+  .presence("copilot_code_review_severity", self.copilot_code_review_severity)
   .opt("copilot_code_review_sources", self.copilot_code_review_sources)
   .field("url", self.url)
   .presence(
@@ -86926,6 +87091,9 @@ pub impl @json.FromJson for ReviewComment with fn from_json(value, path) {
   {
     is_copilot_code_review: @sdkjson.opt_field(
       obj, "is_copilot_code_review", path,
+    ),
+    copilot_code_review_severity: @sdkjson.presence_field(
+      obj, "copilot_code_review_severity", path,
     ),
     copilot_code_review_sources: @sdkjson.opt_field(
       obj, "copilot_code_review_sources", path,
@@ -97925,7 +98093,7 @@ pub impl @json.FromJson for CommitSearchResultItem with fn from_json(
 
 ///|
 ///
-/// The status of the issue, or `null` if it has none. Issue statuses are in preview and only available to accounts enrolled in the preview.
+/// The status of the issue, or `null` if it has none. Issue statuses are in public preview and subject to change.
 #derive(Eq, @debug.Debug)
 pub(all) struct IssueSearchResultItemStatus {
   id : Int64
@@ -98170,6 +98338,7 @@ pub(all) struct IssueSearchResultItem {
   user : NullableSimpleUser?
   labels : Array[IssueSearchResultItemLabelsItem]
   sub_issues_summary : SubIssuesSummary?
+  parent_issue_url : @sdkjson.Presence[String]
   issue_dependencies_summary : IssueDependenciesSummary?
   issue_field_values : Array[IssueFieldValue]?
   state : String
@@ -98229,6 +98398,7 @@ pub fn IssueSearchResultItem::new(
   assignees? : Array[SimpleUser],
   user? : NullableSimpleUser,
   sub_issues_summary? : SubIssuesSummary,
+  parent_issue_url? : String,
   issue_dependencies_summary? : IssueDependenciesSummary,
   issue_field_values? : Array[IssueFieldValue],
   state_reason? : String,
@@ -98266,6 +98436,7 @@ pub fn IssueSearchResultItem::new(
     user,
     labels,
     sub_issues_summary,
+    parent_issue_url: @sdkjson.Presence::from_option(parent_issue_url),
     issue_dependencies_summary,
     issue_field_values,
     state,
@@ -98320,6 +98491,7 @@ pub impl ToJson for IssueSearchResultItem with fn to_json(self) {
   .presence("user", nullable_presence(self.user.map(value => value)))
   .field("labels", self.labels)
   .opt("sub_issues_summary", self.sub_issues_summary)
+  .presence("parent_issue_url", self.parent_issue_url)
   .opt("issue_dependencies_summary", self.issue_dependencies_summary)
   .opt("issue_field_values", self.issue_field_values)
   .field("state", self.state)
@@ -98373,6 +98545,7 @@ pub impl @json.FromJson for IssueSearchResultItem with fn from_json(value, path)
     user: decode_nullable_field(obj, "user", path),
     labels: required_field(obj, "labels", path),
     sub_issues_summary: @sdkjson.opt_field(obj, "sub_issues_summary", path),
+    parent_issue_url: @sdkjson.presence_field(obj, "parent_issue_url", path),
     issue_dependencies_summary: @sdkjson.opt_field(
       obj, "issue_dependencies_summary", path,
     ),
@@ -221620,7 +221793,7 @@ pub impl @json.FromJson for IssuesUpdateRequest with fn from_json(value, path) {
 
 ///|
 ///
-/// The status of the issue, or `null` if it has none. Issue statuses are in preview and only available to accounts enrolled in the preview.
+/// The status of the issue, or `null` if it has none. Issue statuses are in public preview and subject to change.
 #derive(Eq, @debug.Debug)
 pub(all) struct IssuesUpdateResponseStatus {
   id : Int64
@@ -233504,6 +233677,7 @@ pub(all) struct ReposCreateUsingTemplateRequest {
   description : String?
   include_all_branches : Bool?
   private : Bool?
+  custom_properties : Json?
 }
 
 ///|
@@ -233521,8 +233695,16 @@ pub fn ReposCreateUsingTemplateRequest::new(
   description? : String,
   include_all_branches? : Bool,
   private? : Bool,
+  custom_properties? : Json,
 ) -> ReposCreateUsingTemplateRequest {
-  { owner, name, description, include_all_branches, private, }
+  {
+    owner,
+    name,
+    description,
+    include_all_branches,
+    private,
+    custom_properties,
+  }
 }
 
 ///|
@@ -233538,6 +233720,7 @@ pub impl ToJson for ReposCreateUsingTemplateRequest with fn to_json(self) {
   .opt("description", self.description)
   .opt("include_all_branches", self.include_all_branches)
   .opt("private", self.private)
+  .opt("custom_properties", self.custom_properties)
   .build()
 }
 
@@ -233558,6 +233741,7 @@ pub impl @json.FromJson for ReposCreateUsingTemplateRequest with fn from_json(
     description: @sdkjson.opt_field(obj, "description", path),
     include_all_branches: @sdkjson.opt_field(obj, "include_all_branches", path),
     private: @sdkjson.opt_field(obj, "private", path),
+    custom_properties: @sdkjson.opt_field(obj, "custom_properties", path),
   }
 }
 

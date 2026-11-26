@@ -32671,6 +32671,8 @@ pub(all) struct CreateBudgetBudget {
   id : String?
   budget_scope : CreateBudgetBudgetBudgetScope?
   budget_entity_name : String?
+  user : String?
+  consumed_amount : Double?
   budget_amount : Int32?
   prevent_further_usage : Bool?
   budget_product_sku : String?
@@ -32680,7 +32682,7 @@ pub(all) struct CreateBudgetBudget {
 }
 pub fn CreateBudgetBudget::equal(Self, Self) -> Bool
 pub fn CreateBudgetBudget::from_json(@json.Json, @json.DecodeContext) -> Self raise @json.JsonDecodeError
-pub fn CreateBudgetBudget::new(id? : String, budget_scope? : CreateBudgetBudgetBudgetScope, budget_entity_name? : String, budget_amount? : Int32, prevent_further_usage? : Bool, budget_product_sku? : String, budget_type? : CreateBudgetBudgetBudgetType, budget_alerting? : CreateBudgetBudgetBudgetAlerting, expires_at? : String) -> Self
+pub fn CreateBudgetBudget::new(id? : String, budget_scope? : CreateBudgetBudgetBudgetScope, budget_entity_name? : String, user? : String, consumed_amount? : Double, budget_amount? : Int32, prevent_further_usage? : Bool, budget_product_sku? : String, budget_type? : CreateBudgetBudgetBudgetType, budget_alerting? : CreateBudgetBudgetBudgetAlerting, expires_at? : String) -> Self
 pub fn CreateBudgetBudget::not_equal(Self, Self) -> Bool
 pub fn CreateBudgetBudget::to_json(Self) -> @json.Json
 pub fn CreateBudgetBudget::to_repr(Self) -> @debug.Repr
@@ -37538,6 +37540,7 @@ pub(all) struct IssueSearchResultItem {
   user : NullableSimpleUser?
   labels : Array[IssueSearchResultItemLabelsItem]
   sub_issues_summary : SubIssuesSummary?
+  parent_issue_url : @jsonkit.Presence[String]
   issue_dependencies_summary : IssueDependenciesSummary?
   issue_field_values : Array[IssueFieldValue]?
   state : String
@@ -37565,7 +37568,7 @@ pub(all) struct IssueSearchResultItem {
 }
 pub fn IssueSearchResultItem::equal(Self, Self) -> Bool
 pub fn IssueSearchResultItem::from_json(@json.Json, @json.DecodeContext) -> Self raise @json.JsonDecodeError
-pub fn IssueSearchResultItem::new(url~ : String, repository_url~ : String, labels_url~ : String, comments_url~ : String, events_url~ : String, html_url~ : String, id~ : Int64, node_id~ : String, number~ : Int32, title~ : String, locked~ : Bool, labels~ : Array[IssueSearchResultItemLabelsItem], state~ : String, comments~ : Int32, created_at~ : String, updated_at~ : String, score~ : Double, author_association~ : AuthorAssociation, status? : IssueSearchResultItemStatus, active_lock_reason? : String, assignees? : Array[SimpleUser], user? : NullableSimpleUser, sub_issues_summary? : SubIssuesSummary, issue_dependencies_summary? : IssueDependenciesSummary, issue_field_values? : Array[IssueFieldValue], state_reason? : String, assignee? : NullableSimpleUser, milestone? : NullableMilestone, closed_at? : String, text_matches? : Array[SearchResultTextMatchesItem], pull_request? : IssueSearchResultItemPullRequest, body? : String, draft? : Bool, repository? : Repository, body_html? : String, body_text? : String, timeline_url? : String, type_? : IssueType, performed_via_github_app? : NullableIntegration, pinned_comment? : NullableIssueComment, reactions? : ReactionRollup) -> Self
+pub fn IssueSearchResultItem::new(url~ : String, repository_url~ : String, labels_url~ : String, comments_url~ : String, events_url~ : String, html_url~ : String, id~ : Int64, node_id~ : String, number~ : Int32, title~ : String, locked~ : Bool, labels~ : Array[IssueSearchResultItemLabelsItem], state~ : String, comments~ : Int32, created_at~ : String, updated_at~ : String, score~ : Double, author_association~ : AuthorAssociation, status? : IssueSearchResultItemStatus, active_lock_reason? : String, assignees? : Array[SimpleUser], user? : NullableSimpleUser, sub_issues_summary? : SubIssuesSummary, parent_issue_url? : String, issue_dependencies_summary? : IssueDependenciesSummary, issue_field_values? : Array[IssueFieldValue], state_reason? : String, assignee? : NullableSimpleUser, milestone? : NullableMilestone, closed_at? : String, text_matches? : Array[SearchResultTextMatchesItem], pull_request? : IssueSearchResultItemPullRequest, body? : String, draft? : Bool, repository? : Repository, body_html? : String, body_text? : String, timeline_url? : String, type_? : IssueType, performed_via_github_app? : NullableIntegration, pinned_comment? : NullableIssueComment, reactions? : ReactionRollup) -> Self
 pub fn IssueSearchResultItem::not_equal(Self, Self) -> Bool
 pub fn IssueSearchResultItem::to_json(Self) -> @json.Json
 pub fn IssueSearchResultItem::to_repr(Self) -> @debug.Repr
@@ -47119,6 +47122,7 @@ pub impl @json.ToJson for PullRequestReview
 #derive(Eq, @debug.Debug)
 pub(all) struct PullRequestReviewComment {
   is_copilot_code_review : Bool?
+  copilot_code_review_severity : @jsonkit.Presence[PullRequestReviewCommentCopilotCodeReviewSeverity]
   copilot_code_review_sources : Array[PullRequestReviewCommentCopilotCodeReviewSourcesItem]?
   url : String
   pull_request_review_id : Int64?
@@ -47152,12 +47156,28 @@ pub(all) struct PullRequestReviewComment {
 }
 pub fn PullRequestReviewComment::equal(Self, Self) -> Bool
 pub fn PullRequestReviewComment::from_json(@json.Json, @json.DecodeContext) -> Self raise @json.JsonDecodeError
-pub fn PullRequestReviewComment::new(url~ : String, id~ : Int64, node_id~ : String, diff_hunk~ : String, path~ : String, commit_id~ : String, original_commit_id~ : String, body~ : String, created_at~ : String, updated_at~ : String, html_url~ : String, pull_request_url~ : String, author_association~ : AuthorAssociation, links~ : PullRequestReviewCommentLinks, is_copilot_code_review? : Bool, copilot_code_review_sources? : Array[PullRequestReviewCommentCopilotCodeReviewSourcesItem], pull_request_review_id? : Int64, position? : Int32, original_position? : Int32, in_reply_to_id? : Int32, user? : NullableSimpleUser, start_line? : Int32, original_start_line? : Int32, start_side? : PullRequestReviewCommentStartSide, line? : Int32, original_line? : Int32, side? : PullRequestReviewCommentSide, subject_type? : PullRequestReviewCommentSubjectType, reactions? : ReactionRollup, body_html? : String, body_text? : String) -> Self
+pub fn PullRequestReviewComment::new(url~ : String, id~ : Int64, node_id~ : String, diff_hunk~ : String, path~ : String, commit_id~ : String, original_commit_id~ : String, body~ : String, created_at~ : String, updated_at~ : String, html_url~ : String, pull_request_url~ : String, author_association~ : AuthorAssociation, links~ : PullRequestReviewCommentLinks, is_copilot_code_review? : Bool, copilot_code_review_severity? : PullRequestReviewCommentCopilotCodeReviewSeverity, copilot_code_review_sources? : Array[PullRequestReviewCommentCopilotCodeReviewSourcesItem], pull_request_review_id? : Int64, position? : Int32, original_position? : Int32, in_reply_to_id? : Int32, user? : NullableSimpleUser, start_line? : Int32, original_start_line? : Int32, start_side? : PullRequestReviewCommentStartSide, line? : Int32, original_line? : Int32, side? : PullRequestReviewCommentSide, subject_type? : PullRequestReviewCommentSubjectType, reactions? : ReactionRollup, body_html? : String, body_text? : String) -> Self
 pub fn PullRequestReviewComment::not_equal(Self, Self) -> Bool
 pub fn PullRequestReviewComment::to_json(Self) -> @json.Json
 pub fn PullRequestReviewComment::to_repr(Self) -> @debug.Repr
 pub impl @json.FromJson for PullRequestReviewComment
 pub impl @json.ToJson for PullRequestReviewComment
+
+#non_exhaustive
+#derive(Eq, @debug.Debug)
+pub(all) enum PullRequestReviewCommentCopilotCodeReviewSeverity {
+  Low
+  Medium
+  High
+  Unknown(String)
+}
+pub fn PullRequestReviewCommentCopilotCodeReviewSeverity::equal(Self, Self) -> Bool
+pub fn PullRequestReviewCommentCopilotCodeReviewSeverity::from_json(@json.Json, @json.DecodeContext) -> Self raise @json.JsonDecodeError
+pub fn PullRequestReviewCommentCopilotCodeReviewSeverity::not_equal(Self, Self) -> Bool
+pub fn PullRequestReviewCommentCopilotCodeReviewSeverity::to_json(Self) -> @json.Json
+pub fn PullRequestReviewCommentCopilotCodeReviewSeverity::to_repr(Self) -> @debug.Repr
+pub impl @json.FromJson for PullRequestReviewCommentCopilotCodeReviewSeverity
+pub impl @json.ToJson for PullRequestReviewCommentCopilotCodeReviewSeverity
 
 #derive(Eq, @debug.Debug)
 pub(all) struct PullRequestReviewCommentCopilotCodeReviewSourcesItem {
@@ -49901,10 +49921,11 @@ pub(all) struct ReposCreateUsingTemplateRequest {
   description : String?
   include_all_branches : Bool?
   private : Bool?
+  custom_properties : @json.Json?
 }
 pub fn ReposCreateUsingTemplateRequest::equal(Self, Self) -> Bool
 pub fn ReposCreateUsingTemplateRequest::from_json(@json.Json, @json.DecodeContext) -> Self raise @json.JsonDecodeError
-pub fn ReposCreateUsingTemplateRequest::new(name~ : String, owner? : String, description? : String, include_all_branches? : Bool, private? : Bool) -> Self
+pub fn ReposCreateUsingTemplateRequest::new(name~ : String, owner? : String, description? : String, include_all_branches? : Bool, private? : Bool, custom_properties? : @json.Json) -> Self
 pub fn ReposCreateUsingTemplateRequest::not_equal(Self, Self) -> Bool
 pub fn ReposCreateUsingTemplateRequest::to_json(Self) -> @json.Json
 pub fn ReposCreateUsingTemplateRequest::to_repr(Self) -> @debug.Repr
@@ -55108,6 +55129,7 @@ pub impl @json.ToJson for RepositorySubscription
 #derive(Eq, @debug.Debug)
 pub(all) struct ReviewComment {
   is_copilot_code_review : Bool?
+  copilot_code_review_severity : @jsonkit.Presence[ReviewCommentCopilotCodeReviewSeverity]
   copilot_code_review_sources : Array[ReviewCommentCopilotCodeReviewSourcesItem]?
   url : String
   pull_request_review_id : Int64?
@@ -55141,12 +55163,28 @@ pub(all) struct ReviewComment {
 }
 pub fn ReviewComment::equal(Self, Self) -> Bool
 pub fn ReviewComment::from_json(@json.Json, @json.DecodeContext) -> Self raise @json.JsonDecodeError
-pub fn ReviewComment::new(url~ : String, id~ : Int64, node_id~ : String, diff_hunk~ : String, path~ : String, original_position~ : Int32, commit_id~ : String, original_commit_id~ : String, body~ : String, created_at~ : String, updated_at~ : String, html_url~ : String, pull_request_url~ : String, author_association~ : AuthorAssociation, links~ : ReviewCommentLinks, is_copilot_code_review? : Bool, copilot_code_review_sources? : Array[ReviewCommentCopilotCodeReviewSourcesItem], pull_request_review_id? : Int64, position? : Int32, in_reply_to_id? : Int32, user? : NullableSimpleUser, body_text? : String, body_html? : String, reactions? : ReactionRollup, side? : ReviewCommentSide, start_side? : ReviewCommentStartSide, line? : Int32, original_line? : Int32, start_line? : Int32, original_start_line? : Int32, subject_type? : ReviewCommentSubjectType) -> Self
+pub fn ReviewComment::new(url~ : String, id~ : Int64, node_id~ : String, diff_hunk~ : String, path~ : String, original_position~ : Int32, commit_id~ : String, original_commit_id~ : String, body~ : String, created_at~ : String, updated_at~ : String, html_url~ : String, pull_request_url~ : String, author_association~ : AuthorAssociation, links~ : ReviewCommentLinks, is_copilot_code_review? : Bool, copilot_code_review_severity? : ReviewCommentCopilotCodeReviewSeverity, copilot_code_review_sources? : Array[ReviewCommentCopilotCodeReviewSourcesItem], pull_request_review_id? : Int64, position? : Int32, in_reply_to_id? : Int32, user? : NullableSimpleUser, body_text? : String, body_html? : String, reactions? : ReactionRollup, side? : ReviewCommentSide, start_side? : ReviewCommentStartSide, line? : Int32, original_line? : Int32, start_line? : Int32, original_start_line? : Int32, subject_type? : ReviewCommentSubjectType) -> Self
 pub fn ReviewComment::not_equal(Self, Self) -> Bool
 pub fn ReviewComment::to_json(Self) -> @json.Json
 pub fn ReviewComment::to_repr(Self) -> @debug.Repr
 pub impl @json.FromJson for ReviewComment
 pub impl @json.ToJson for ReviewComment
+
+#non_exhaustive
+#derive(Eq, @debug.Debug)
+pub(all) enum ReviewCommentCopilotCodeReviewSeverity {
+  Low
+  Medium
+  High
+  Unknown(String)
+}
+pub fn ReviewCommentCopilotCodeReviewSeverity::equal(Self, Self) -> Bool
+pub fn ReviewCommentCopilotCodeReviewSeverity::from_json(@json.Json, @json.DecodeContext) -> Self raise @json.JsonDecodeError
+pub fn ReviewCommentCopilotCodeReviewSeverity::not_equal(Self, Self) -> Bool
+pub fn ReviewCommentCopilotCodeReviewSeverity::to_json(Self) -> @json.Json
+pub fn ReviewCommentCopilotCodeReviewSeverity::to_repr(Self) -> @debug.Repr
+pub impl @json.FromJson for ReviewCommentCopilotCodeReviewSeverity
+pub impl @json.ToJson for ReviewCommentCopilotCodeReviewSeverity
 
 #derive(Eq, @debug.Debug)
 pub(all) struct ReviewCommentCopilotCodeReviewSourcesItem {
