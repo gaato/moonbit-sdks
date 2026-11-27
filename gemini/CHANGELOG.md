@@ -2,6 +2,10 @@
 
 ## [Unreleased]
 
+### Changed
+
+- **Regenerated from the upstream spec fetched 2026-11-27** (sha256 `d2126226ff32`). Changes are batched for the next weekly release; see the generated interface diff.
+
 ## [0.2.0] - 2026-11-23
 
 ### Changed
